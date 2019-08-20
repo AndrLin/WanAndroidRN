@@ -1,114 +1,56 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React from 'react';
+import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import HomeScreen from './src/screens/HomeScreen';
+import ProjectScreen from './src/screens/ProjectScreen';
+import TiXiScreen from './src/screens/TiXiScreen';
+import UserScreen from './src/screens/UserScreen';
 
-import React, {Fragment} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import IconFont from './src/assets/iconfont/Icon';
+import colors from './src/assets/colors';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const TabNavigator = createBottomTabNavigator({
+  Home: {
+    screen: HomeScreen,
+    navigationOptions: {
+      tabBarLabel: '首页',
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        return <IconFont name={'home'} size={25} color={tintColor}/>;
+      }
+    }
+  },
+  TiXi: {
+    screen: TiXiScreen,
+    navigationOptions: {
+      tabBarLabel: '体系',
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        return <IconFont name={'tixi'} size={25} color={tintColor}/>;
+      }
+    }
+  },
+  Project: {
+    screen: ProjectScreen,
+    navigationOptions: {
+      tabBarLabel: '项目',
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        return <IconFont name={'project'} size={25} color={tintColor}/>;
+      }
+    }
+  },
+  Person: {
+    screen: UserScreen,
+    navigationOptions: {
+      tabBarLabel: '我的',
+      tabBarIcon: ({focused, horizontal, tintColor}) => {
+        return <IconFont name={'person'} size={25} color={tintColor}/>;
+      }
+    }
+  }
+}, {
+  tabBarOptions: {
+    activeTintColor: colors.activeTintColor,
+    inactiveTintColor: colors.inactiveTintColor,
+    showIcon: true
+  }
+})
 
-const App = () => {
-  return (
-    <Fragment>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </Fragment>
-  );
-};
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
-
-export default App;
+export default createAppContainer(TabNavigator);
