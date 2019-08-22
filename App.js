@@ -1,14 +1,15 @@
 import React from 'react';
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
 import HomeScreen from './src/screens/HomeScreen';
 import ProjectScreen from './src/screens/ProjectScreen';
 import TiXiScreen from './src/screens/TiXiScreen';
 import UserScreen from './src/screens/UserScreen';
+import WebScreen from './src/screens/WebScreen';
 
 import IconFont from './src/assets/iconfont/Icon';
 import colors from './src/assets/colors';
 
-const TabNavigator = createBottomTabNavigator({
+const MainTabNavigator = createBottomTabNavigator({
   Home: {
     screen: HomeScreen,
     navigationOptions: {
@@ -51,6 +52,23 @@ const TabNavigator = createBottomTabNavigator({
     inactiveTintColor: colors.inactiveTintColor,
     showIcon: true
   }
-})
+});
 
-export default createAppContainer(TabNavigator);
+const RootNavigator = createStackNavigator({
+  Main: {
+    screen: MainTabNavigator,
+    navigationOptions: {
+      header: null,
+      headerBackTitle: null
+    }
+  },
+  Web: {
+    screen: WebScreen,
+    navigationOptions: {
+      headerTintColor: '#000'
+    }
+  }
+});
+
+
+export default createAppContainer(RootNavigator);
