@@ -17,7 +17,8 @@ class TabNewsScreen extends React.Component {
        data: [],
        banner: [],
        page: 0,
-       isRefresh: false
+       isRefresh: false,
+       isNoMore: false
     };
     this.getBanner = this.getBanner.bind(this);
     this.initData = this.initData.bind(this);
@@ -41,10 +42,11 @@ class TabNewsScreen extends React.Component {
   getList() {
     this.getNewsList()
       .then(response => {
-        const {datas} = response.data.data;
+        const {over, datas} = response.data.data;
         this.setState((state) => ({
           data: state.page == 0 ? datas : state.data.concat(datas),
-          isRefresh: false
+          isRefresh: false,
+          isNoMore: over
         }));
       });
   }

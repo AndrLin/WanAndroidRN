@@ -1,7 +1,14 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import PropTypes from 'prop-types';
 
 export default class NewsItem extends React.Component {
+
+    static propTypes = {
+        data: PropTypes.object.isRequired,
+        onPressItem: PropTypes.func
+    }
+
     render() {
         return (
             <TouchableOpacity onPress={() => {
