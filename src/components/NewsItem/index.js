@@ -4,9 +4,14 @@ import PropTypes from 'prop-types';
 
 export default class NewsItem extends React.Component {
 
+    static defaultProps = {
+        showTag: true
+    }
+
     static propTypes = {
         data: PropTypes.object.isRequired,
-        onPressItem: PropTypes.func
+        onPressItem: PropTypes.func,
+        showTag: PropTypes.bool
     }
 
     render() {
@@ -16,7 +21,7 @@ export default class NewsItem extends React.Component {
             }}
             activeOpacity={0.5}>
             <View style={styles.item}>
-                <View style={styles.tag_wrap}>
+                <View style={[styles.tag_wrap, {display: this.props.showTag ? 'flex' : 'none'}]}>
                     <Text style={[styles.tag_top, {display: this.props.data.type == 1 ? 'flex' : 'none'}]}>置顶</Text>
                     <Text style={[styles.tag_new, {display: this.props.data.fresh ? 'flex' : 'none'}]}>最新</Text>
                     <Text style={styles.tag_category}>{this.props.data.superChapterName}</Text>
