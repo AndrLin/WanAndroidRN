@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {View, Text, StyleSheet, TouchableOpacity, Animated, FlatList} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Animated, FlatList, ScrollView} from 'react-native';
 import colors from '../../assets/colors';
 import NewsItem from '../../components/NewsItem';
 import {withCollapsibleForTabChild} from 'react-navigation-collapsible';
@@ -20,6 +20,8 @@ class TabOfficialAccountScreen extends React.Component {
        isNoMoreData: false,
        data: [],
     };
+
+    this.flatList = React.createRef();
 
     this.getAccounts = this.getAccounts.bind(this);
     this.changeAccount = this.changeAccount.bind(this);
@@ -60,7 +62,8 @@ class TabOfficialAccountScreen extends React.Component {
       currentAccoutId: item.id,
       page: 1
     }, () => {
-      this.getList()
+      this.getList();
+      this.flatList.current.getNode().scrollToIndex({viewPosition: 0, index: 0});
     })
   }
 
@@ -92,22 +95,25 @@ class TabOfficialAccountScreen extends React.Component {
     const {animatedY, onScroll} = this.props.collapsible;
     return (
       <View style={{ flex: 1}}>
-            <View style={{flexWrap: 'wrap', flexDirection: 'row', borderBottomColor: colors.bgGray, borderBottomWidth: 1, paddingBottom: 10, paddingLeft: 10}}>
+            <View style={{height: 45}}>
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={{height: 45, borderBottomColor: colors.bgGray, borderBottomWidth: 1, paddingLeft: 10}}>
               {
-                this.state.accounts.map((item) => {
-                  return (
-                    <TouchableOpacity key={item.id + ''}
-                    onPress={() => {
-                      this.changeAccount(item)
-                    }}>
-                      <Text style={this.state.currentAccoutId == item.id? styles.current_account : styles.normal_account}>{item.name}</Text>
-                    </TouchableOpacity>
-                  )
-                })
-              }
+                  this.state.accounts.map((item) => {
+                    return (
+                      <TouchableOpacity key={item.id + ''}
+                      onPress={() => {
+                        this.changeAccount(item)
+                      }}>
+                        <Text style={this.state.currentAccoutId == item.id? styles.current_account : styles.normal_account}>{item.name}</Text>
+                      </TouchableOpacity>
+                    )
+                  })
+                }
+              </ScrollView>
             </View>
 
             <AnimatedFlatList
+              ref={this.flatList}
               style={{flex: 1}}
               data={this.state.data}
               renderItem={this._renderItem}
@@ -125,19 +131,24 @@ class TabOfficialAccountScreen extends React.Component {
 
 const styles = StyleSheet.create({
   current_account: {
-    borderWidth: 1,
-    borderColor: colors.activeTintColor,
-    backgroundColor: colors.activeTintColor,
+    backgroundColor: colors.tagBgSelected,
+    borderRadius: 12,
     color: '#FFF',
-    padding: 5, 
+    paddingLeft: 15,
+    paddingTop: 5,
+    paddingRight: 15,
+    paddingBottom: 5,
     marginRight: 10, 
     marginTop: 10
   },
   normal_account: {
-    borderColor: colors.inactiveTintColor,
-    color: colors.inactiveTintColor, 
-    borderWidth: 1,
-    padding: 5, 
+    backgroundColor: colors.tagBgNormal,
+    borderRadius: 12,
+    color: colors.inactiveTintColor,
+    paddingLeft: 15,
+    paddingTop: 5,
+    paddingRight: 15,
+    paddingBottom: 5,
     marginRight: 10, 
     marginTop: 10
   }

@@ -5,6 +5,7 @@ import ProjectScreen from './src/screens/ProjectScreen';
 import TiXiScreen from './src/screens/TiXiScreen';
 import UserScreen from './src/screens/UserScreen';
 import WebScreen from './src/screens/WebScreen';
+import ArticleListScreen from './src/screens/ArticleListScreen';
 
 import IconFont from './src/assets/iconfont/Icon';
 import colors from './src/assets/colors';
@@ -63,10 +64,15 @@ const RootNavigator = createStackNavigator({
     }
   },
   Web: {
-    screen: WebScreen,
-    navigationOptions: {
-      headerTintColor: '#000'
-    }
+    screen: WebScreen
+  },
+  ArticleList: {
+    screen: ArticleListScreen,
+  }
+}, {
+  defaultNavigationOptions: {
+    headerTintColor: '#000',
+    headerBackTitle: null
   }
 });
 

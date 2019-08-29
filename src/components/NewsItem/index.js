@@ -42,12 +42,12 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         paddingStart: 15,
         paddingEnd: 15,
-        paddingTop: 10,
         borderBottomColor: '#e1e1e1',
         borderBottomWidth: 1
     },
     tag_wrap: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginTop: 10
     },
     tag_top: {
         marginEnd: 10,

@@ -7,5 +7,8 @@ export default {
 
     line: '#e1e1e1',
 
-    progress: '#1E78FB'
+    progress: '#1E78FB',
+
+    tagBgNormal: '#eeeeee',
+    tagBgSelected: '#000'
 };
