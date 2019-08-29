@@ -1,6 +1,7 @@
 export default {
     primaryColor: '#000',
-    bgGray: '#e0e0e0',
+    bgGray: '#eeeeee',
+    bgNormal: '#FFF',
 
     activeTintColor: '#000',
     inactiveTintColor: '#757575',

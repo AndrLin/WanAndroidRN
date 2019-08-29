@@ -14,19 +14,19 @@ const indicatorMargin = indicatorWidth / 2;
 
 const TopTabNavigator = createMaterialTopTabNavigator(
   {
-    News: {
+    TabNews: {
       screen: TabNewsScreen,
       navigationOptions: {
         tabBarLabel: '最新'
       }
     },
-    Project: {
+    TabProject: {
       screen: TabProjectScreen,
       navigationOptions: {
         tabBarLabel: '项目'
       }
     },
-    OfficialAccount: {
+    TabOfficialAccount: {
       screen: TabOfficialAccountScreen,
       navigationOptions: {
         tabBarLabel: '公众号'
