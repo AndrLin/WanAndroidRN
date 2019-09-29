@@ -1,11 +1,15 @@
 import React from 'react';
-import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from './src/screens/HomeScreen';
 import ProjectScreen from './src/screens/ProjectScreen';
 import TiXiScreen from './src/screens/TiXiScreen';
 import UserScreen from './src/screens/UserScreen';
 import WebScreen from './src/screens/WebScreen';
 import ArticleListScreen from './src/screens/ArticleListScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import CollectListScreen from './src/screens/CollectListScreen';
 
 import IconFont from './src/assets/iconfont/Icon';
 import colors from './src/assets/colors';
@@ -64,10 +68,22 @@ const RootNavigator = createStackNavigator({
     }
   },
   Web: {
-    screen: WebScreen
+    screen: WebScreen,
   },
   ArticleList: {
     screen: ArticleListScreen,
+  },
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: {
+      title: '登录',
+    }
+  },
+  CollectList: {
+    screen: CollectListScreen,
+    navigationOptions: {
+      title: '我的收藏',
+    }
   }
 }, {
   defaultNavigationOptions: {

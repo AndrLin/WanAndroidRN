@@ -1,6 +1,6 @@
 import React from 'react';
-import axios from 'axios';
-import {View, Text, ScrollView, SafeAreaView, TouchableOpacity, FlatList} from 'react-native';
+import axios from '../common/NetUtil';
+import {View, Text, ScrollView, SafeAreaView, TouchableOpacity, FlatList, DeviceEventEmitter} from 'react-native';
 import ProjectItem from '../components/ProjectItem';
 import colors from '../assets/colors';
 import IconFont from '../assets/iconfont/Icon';
@@ -25,6 +25,20 @@ export default class ProjectScreen extends React.Component {
   
   componentDidMount() {
     this.getTree();
+    this.loginListener = DeviceEventEmitter.addListener('isLogin', this._onRefresh);
+    this.collectChangeListener = DeviceEventEmitter.addListener('collectChange', this._collectChangeEvent);
+  }
+
+  componentWillUnmount() {
+      this.loginListener.remove();
+      this.collectChangeListener.remove();
+  }
+
+  _collectChangeEvent = (id) => {
+      const listData = [...this.state.data];
+      this.setState({
+          data: listData.map((item) => item.id === id ? {...item, collect:  !item.collect} : item),
+      })
   }
 
   getTree() {
@@ -85,7 +99,7 @@ export default class ProjectScreen extends React.Component {
   _renderItem = ({item}) => (
     <ProjectItem 
       data={item} 
-      onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link})}}/>
+      onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link, id: item.id, collect: item.collect})}}/>
   );
 
 

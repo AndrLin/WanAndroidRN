@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Dimensions, SafeAreaView, Animated} from 'react-native';
-import {createMaterialTopTabNavigator} from 'react-navigation';
+import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import SearchBar from '../components/SearchBar';
 import TabNewsScreen from './home/TabNewsScreen';
 import TabProjectScreen from './home/TabProjectScreen';

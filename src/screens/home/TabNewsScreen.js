@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, FlatList, Image, Dimensions, TouchableOpacity, Animated} from 'react-native';
+import {View, FlatList, Image, Dimensions, TouchableOpacity, Animated, DeviceEventEmitter} from 'react-native';
 import NewsItem from '../../components/NewsItem';
-import axios from 'axios';
+import axios from '../../common/NetUtil';
 import Swiper from 'react-native-swiper';
 import colors from '../../assets/colors';
 import {withCollapsibleForTabChild} from 'react-navigation-collapsible';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const screenWidth = Dimensions.get('window').width;
@@ -28,6 +29,20 @@ class TabNewsScreen extends React.Component {
   componentDidMount() {
     this.getBanner();
     this.initData();
+    this.loginListener = DeviceEventEmitter.addListener('isLogin', this._onRefresh);
+    this.collectChangeListener = DeviceEventEmitter.addListener('collectChange', this._collectChangeEvent);
+  }
+
+  componentWillUnmount() {
+    this.loginListener.remove();
+    this.collectChangeListener.remove();
+  }
+
+  _collectChangeEvent = (id) => {
+    const listData = [...this.state.data];
+    this.setState({
+      data: listData.map((item) => item.id === id ? {...item, collect:  !item.collect} : item),
+    })
   }
 
   getBanner() {
@@ -91,7 +106,7 @@ class TabNewsScreen extends React.Component {
   _renderItem = ({item}) => (
     <NewsItem 
       data={item}
-      onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link})}}/>
+      onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link, id: item.id, collect: item.collect})}}/>
   );
 
   _renderHeader = () => {

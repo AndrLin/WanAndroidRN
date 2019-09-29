@@ -1,6 +1,6 @@
 import React from 'react';
-import axios from 'axios';
-import {SafeAreaView, FlatList} from 'react-native';
+import axios from '../common/NetUtil';
+import {SafeAreaView, FlatList, DeviceEventEmitter} from 'react-native';
 import NewsItem from '../components/NewsItem';
 
 export default class ArticleListScreen extends React.Component {
@@ -14,20 +14,36 @@ export default class ArticleListScreen extends React.Component {
     constructor(props) {
         super(props)
       
+        let id = this.props.navigation.state.params.cid;
+
         this.state = {
            page: 0,
            isRefresh: false,
            isNoMoreData: false,
            data: [],
-           cid: this.props.navigation.state.params.cid
+           cid: id
         };
         this.getList = this.getList.bind(this);
     };
 
     componentDidMount() {
         this.getList();
+        this.loginListener = DeviceEventEmitter.addListener('isLogin', this._onRefresh);
+        this.collectChangeListener = DeviceEventEmitter.addListener('collectChange', this._collectChangeEvent);
+    }
+    
+    componentWillUnmount() {
+        this.loginListener.remove();
+        this.collectChangeListener.remove();
     }
 
+    _collectChangeEvent = (id) => {
+        const listData = [...this.state.data];
+        this.setState({
+            data: listData.map((item) => item.id === id ? {...item, collect:  !item.collect} : item),
+        })
+    }
+    
     getList() {
         axios.get(`https://www.wanandroid.com/article/list/${this.state.page}/json?cid=${this.state.cid}`)
         .then(res => {
@@ -61,7 +77,7 @@ export default class ArticleListScreen extends React.Component {
     <NewsItem 
         data={item}
         showTag={false}
-        onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link})}}/>
+        onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link, id: item.id, collect: item.collect})}}/>
     );
 
     render() {

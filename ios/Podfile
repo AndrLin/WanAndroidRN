@@ -29,7 +29,6 @@ target 'WanAndroidRN' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'WanAndroidRNTests' do
     inherit! :search_paths

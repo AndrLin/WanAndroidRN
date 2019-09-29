@@ -1,6 +1,6 @@
 import React from 'react';
-import axios from 'axios';
-import {View, Text, StyleSheet, TouchableOpacity, Animated, FlatList, ScrollView} from 'react-native';
+import axios from '../../common/NetUtil';
+import {View, Text, StyleSheet, TouchableOpacity, Animated, FlatList, ScrollView, DeviceEventEmitter} from 'react-native';
 import colors from '../../assets/colors';
 import NewsItem from '../../components/NewsItem';
 import {withCollapsibleForTabChild} from 'react-navigation-collapsible';
@@ -30,6 +30,20 @@ class TabOfficialAccountScreen extends React.Component {
 
   componentDidMount() {
     this.getAccounts();
+    this.loginListener = DeviceEventEmitter.addListener('isLogin', this._onRefresh);
+    this.collectChangeListener = DeviceEventEmitter.addListener('collectChange', this._collectChangeEvent);
+  }
+
+  componentWillUnmount() {
+    this.loginListener.remove();
+    this.collectChangeListener.remove();
+  }
+
+  _collectChangeEvent = (id) => {
+    const listData = [...this.state.data];
+    this.setState({
+      data: listData.map((item) => item.id === id ? {...item, collect:  !item.collect} : item),
+    })
   }
   
   getAccounts() {
@@ -45,7 +59,7 @@ class TabOfficialAccountScreen extends React.Component {
       });
   }
 
-  getList() {
+ getList() {
     axios.get(`https://wanandroid.com/wxarticle/list/${this.state.currentAccoutId}/${this.state.page}/json`)
       .then(res => {
         const {over, datas} = res.data.data;
@@ -88,7 +102,7 @@ class TabOfficialAccountScreen extends React.Component {
     <NewsItem 
       data={item}
       showTag={false}
-      onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link})}}/>
+      onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link, id: item.id, collect: item.collect})}}/>
   );
 
   render() {

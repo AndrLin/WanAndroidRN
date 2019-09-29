@@ -1,7 +1,7 @@
 import React from 'react';
-import {FlatList, Animated} from 'react-native';
+import {FlatList, Animated, DeviceEventEmitter} from 'react-native';
 import ProjectItem from '../../components/ProjectItem';
-import axios from 'axios';
+import axios from '../../common/NetUtil';
 import {withCollapsibleForTabChild} from 'react-navigation-collapsible';
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -21,7 +21,22 @@ class TabProjectScreen extends React.Component {
 
   componentDidMount() {
     this.getList();
+    this.loginListener = DeviceEventEmitter.addListener('isLogin', this._onRefresh);
+    this.collectChangeListener = DeviceEventEmitter.addListener('collectChange', this._collectChangeEvent);
   }
+
+  componentWillUnmount() {
+    this.loginListener.remove();
+    this.collectChangeListener.remove();
+  }
+
+  _collectChangeEvent = (id) => {
+    const listData = [...this.state.data];
+    this.setState({
+      data: listData.map((item) => item.id === id ? {...item, collect:  !item.collect} : item),
+    })
+  }
+
 
   getList() {
     axios.get(`https://wanandroid.com/article/listproject/${this.state.page}/json`)
@@ -57,7 +72,7 @@ class TabProjectScreen extends React.Component {
   _renderItem = ({item}) => (
     <ProjectItem 
       data={item} 
-      onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link})}}/>
+      onPressItem={() => {this.props.navigation.navigate('Web', {title: item.title, url: item.link, id: item.id, collect: item.collect})}}/>
   );
 
   render() {
